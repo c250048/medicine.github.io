@@ -241,6 +241,10 @@
 
         <div id="statusMessage"></div>
 
+        <div style="text-align: center; margin-bottom: 20px; font-size: 12px; color: #999;">
+            <span id="syncStatus">📱 ローカル保存のみ</span>
+        </div>
+
         <div class="history-section">
             <div class="history-header">
                 <div class="history-title">📋 履歴</div>
@@ -251,6 +255,9 @@
     </div>
 
     <script>
+        // Google Apps Script のウェブアプリURL（Step 2 でコピーしたURLを貼り付け）
+        const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7KOzt_c_PymCIJ4L23rjLzZegAzieHtO-m8Ut8-D3Ylw9M6QGBE5SZLiFrUfTzIoJ0A/exec";
+
         // 日付をフォーマット
         function formatDate(date) {
             const year = date.getFullYear();
@@ -303,11 +310,13 @@
             const now = new Date();
             const timeLabel = time === 'morning' ? '朝' : '晩';
 
-            history.unshift({
+            const historyItem = {
                 date: formatDate(now),
                 time: timeLabel,
                 timestamp: now.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })
-            });
+            };
+
+            history.unshift(historyItem);
 
             // 最新50件まで保存
             if (history.length > 50) {
@@ -315,7 +324,26 @@
             }
 
             localStorage.setItem('medicineHistory', JSON.stringify(history));
+
+            // Google Sheet に送信
+            sendToGoogleSheet(historyItem);
+
             updateHistoryDisplay();
+        }
+
+        // Google Sheet に送信
+        function sendToGoogleSheet(data) {
+            if (!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL === "YOUR_WEBAPP_URL_HERE") {
+                console.log("Google Apps Script URL が未設定です");
+                return;
+            }
+
+            fetch(GOOGLE_APPS_SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                mode: 'no-cors'
+            })
+                .catch(error => console.log("Google Sheet への送信結果:", error));
         }
 
         // チェックをトグル
@@ -380,6 +408,7 @@
         // 初期化
         function init() {
             updateDateDisplay();
+            updateSyncStatus();
             const status = getCheckStatus();
 
             if (status.morning) {
@@ -402,6 +431,18 @@
             }, 60000);
 
             window.lastCheckedDate = getTodayKey();
+        }
+
+        // Google Sheet 同期状態を表示
+        function updateSyncStatus() {
+            const statusEl = document.getElementById('syncStatus');
+            if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL !== "YOUR_WEBAPP_URL_HERE") {
+                statusEl.textContent = '☁️ Google Sheet に同期';
+                statusEl.style.color = '#28a745';
+            } else {
+                statusEl.textContent = '📱 ローカル保存のみ';
+                statusEl.style.color = '#999';
+            }
         }
 
         // ページ読み込み時に初期化

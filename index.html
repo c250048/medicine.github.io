@@ -333,7 +333,7 @@
 
         // Google Sheet に送信
         function sendToGoogleSheet(data) {
-            if (!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL === "YOUR_WEBAPP_URL_HERE") {
+            if (!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbx7KOzt_c_PymCIJ4L23rjLzZegAzieHtO-m8Ut8-D3Ylw9M6QGBE5SZLiFrUfTzIoJ0A/exec") {
                 console.log("Google Apps Script URL が未設定です");
                 return;
             }
@@ -436,7 +436,7 @@
         // Google Sheet 同期状態を表示
         function updateSyncStatus() {
             const statusEl = document.getElementById('syncStatus');
-            if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL !== "YOUR_WEBAPP_URL_HERE") {
+            if (GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbx7KOzt_c_PymCIJ4L23rjLzZegAzieHtO-m8Ut8-D3Ylw9M6QGBE5SZLiFrUfTzIoJ0A/exec") {
                 statusEl.textContent = '☁️ Google Sheet に同期';
                 statusEl.style.color = '#28a745';
             } else {

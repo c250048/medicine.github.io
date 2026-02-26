@@ -256,7 +256,7 @@
 
     <script>
         // Google Apps Script のウェブアプリURL（Step 2 でコピーしたURLを貼り付け）
-        const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx10Fc3HPAXQl6TjVQnOAV_JXwzkuKVxWCpYASWeGyosegx6okse4o2i6U51FFEH_f0ZQ/exec";
+        const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2V0vaoHSz6vCBTz8RQTso1jP0RbXegZ6bW91KeAflrxHBPsrk3d-cbzh8cUmeSgkt4Q/exec";
 
         // 日付をフォーマット
         function formatDate(date) {
@@ -345,7 +345,8 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
+                mode: 'cors'
             })
                 .then(response => response.json())
                 .then(result => {

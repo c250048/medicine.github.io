@@ -346,16 +346,11 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data),
-                mode: 'cors'
+                mode: 'no-cors'
             })
-                .then(response => response.json())
-                .then(result => {
-                    console.log("[Google Sheet 送信] 結果:", result);
-                    if (result.status === 'success') {
-                        console.log("[Google Sheet 送信] ✅ 正常にGoogle Sheetに送信されました");
-                    } else {
-                        console.error("[Google Sheet 送信] ❌ エラー:", result.message);
-                    }
+                .then(response => {
+                    console.log("[Google Sheet 送信] ✅ リクエストが送信されました");
+                    console.log("[Google Sheet 送信] ※ no-cors モードのため詳細なレスポンスは確認できません");
                 })
                 .catch(error => {
                     console.error("[Google Sheet 送信] エラー発生:", error);

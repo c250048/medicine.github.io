@@ -342,11 +342,19 @@
 
             fetch(GOOGLE_APPS_SCRIPT_URL, {
                 method: 'POST',
-                body: JSON.stringify(data),
-                mode: 'no-cors'
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
             })
-                .then(response => {
-                    console.log("[Google Sheet 送信] 成功 - ステータス:", response.status);
+                .then(response => response.json())
+                .then(result => {
+                    console.log("[Google Sheet 送信] 結果:", result);
+                    if (result.status === 'success') {
+                        console.log("[Google Sheet 送信] ✅ 正常にGoogle Sheetに送信されました");
+                    } else {
+                        console.error("[Google Sheet 送信] ❌ エラー:", result.message);
+                    }
                 })
                 .catch(error => {
                     console.error("[Google Sheet 送信] エラー発生:", error);
